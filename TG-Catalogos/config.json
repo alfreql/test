@@ -1,0 +1,6 @@
+{
+    "host": "test-20171206-cluster.cluster-csz2saxopvqn.eu-central-1.rds.amazonaws.com",
+    "user": "travelgenio",
+    "password": "Ojd8nfGhNx36hkP8",
+    "database": "TestDB"
+  }

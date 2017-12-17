@@ -1,0 +1,5 @@
+{
+    "RESOURCE_COUNTRY_ALL" : "SELECT CountryCode, Name, RegionCode, PhoneCode FROM Countries WHERE Deleted = 0",
+    "RESOURCE_COUNTRY_BY_ID" : "SELECT CountryCode, Name, RegionCode, PhoneCode FROM Countries WHERE Deleted = 0 AND CountryCode = ?",
+    "RESOURCE_COUNTRY_UPDATE" : "UPDATE Countries SET Name = ?, RegionCode = ?, Deleted = ?, PhoneCode = ?  WHERE CountryCode = ?"
+}
