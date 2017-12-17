@@ -14,8 +14,10 @@ module.exports.getById = (event, context, callback) => {
 
   context.callbackWaitsForEmptyEventLoop = false;
 
+  var resource = event.httpMethod + ":" + event.resource;
+  console.log(resource);
   console.log("event.pathParameters.id = " + event.pathParameters.id);
-  repository.getById(resources.RESOURCE_COUNTRY_BY_ID, event.pathParameters.id, null, function (error, results) {
+  repository.getById(resource, event.pathParameters.id, null, function (error, results) {
 
     if (error) {
       console.log("Error");
@@ -29,7 +31,6 @@ module.exports.getById = (event, context, callback) => {
       response.body = JSON.stringify(results);
     }
 
-    console.log("call callback");
     callback(null, response);
   });
 

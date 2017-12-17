@@ -13,7 +13,10 @@ module.exports.getAll = (event, context, callback) => {
 
   context.callbackWaitsForEmptyEventLoop = false;
 
-  repository.getAll(resources.RESOURCE_COUNTRY_ALL, null, function (error, results) {
+  var resource = event.httpMethod + ":" + event.resource;
+  console.log(resource);
+
+  repository.getAll(resource, null, function (error, results) {
 
     if (error) {
       console.log("Eroor");
@@ -21,14 +24,7 @@ module.exports.getAll = (event, context, callback) => {
     }
 
     console.log("OKKKKIIIIIIIIII");
-    var response = { statusCode: 404, body: "Not Found" };
-    if (results != null && results.length > 0) {
-      response.statusCode = 200;
-      response.body = JSON.stringify(results);
-    }
-
-    console.log("call callback");
-    callback(null, response);
+    callback(null, { statusCode: 200, body: JSON.stringify(results) });
   });
 
 };
