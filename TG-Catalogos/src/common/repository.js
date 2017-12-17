@@ -11,29 +11,24 @@ var pool = mysql.createPool({
 });
 
 
-/* var sqlRepo = {
-  allCountry: "SELECT CountryCode, Name, RegionCode, PhoneCode FROM Countries WHERE Deleted = 0",
-  country: "SELECT CountryCode, Name, RegionCode, PhoneCode FROM Countries WHERE Deleted = 0 AND CountryCode = ",
-  updateCountry: "UPDATE Countries SET Name = ?, RegionCode = ?, Deleted = ?, PhoneCode = ?  WHERE CountryCode = ? ",
-
+/**
+ * Retorna la query asignada al: HTTPMethod:/recurso
+ * @param {*} resource 
+ */
+var getSqlQuery = function (resource) 
+{
+  var sql = resources[resource];
+  if(sql == null)
+  {
+    console.log("SQL query no encontrada para recurso: " + resource);
+    throw Error("SQL query no encontrada para recurso: " + resource);
+  }
+  return sql;
 };
 
+exports.getAll = function (resource, nestingOptions, callback) {
 
-var getSqlQuery = function (resource) {
-  console.log("getSqlQuery: " + resource);
-  if (resource == resources.RESOURCE_COUNTRY_ALL)
-    return sqlRepo["allCountry"];
-
-  if (resource == resources.RESOURCE_COUNTRY_BY_ID)
-    return sqlRepo["country"];
-
-  return "";
-
-}; */
-
-exports.getAll = function (sql, nestingOptions, callback) {
-
-  //var sql = getSqlQuery(resource);
+  var sql = getSqlQuery(resource);
   console.log("SQL = " + sql);
   dbData(sql, [], true, function (error, result) {
 
@@ -46,9 +41,9 @@ exports.getAll = function (sql, nestingOptions, callback) {
   });
 };
 
-exports.getById = function (sql, id, nestingOptions, callback) {
+exports.getById = function (resource, id, nestingOptions, callback) {
 
-  //var sql = getSqlQuery(resource) + pool.escape(id);
+  var sql = getSqlQuery(resource);
   console.log("SQL = " + sql);
   dbData(sql, [id], false, function (error, result) {
 
@@ -62,6 +57,7 @@ exports.getById = function (sql, id, nestingOptions, callback) {
 };
 
 var dbData = function getData(sql, parameters, all, callback) {
+
   pool.getConnection(function (err, connection) {
     console.log("Inside....");
 
@@ -101,7 +97,7 @@ var dbData = function getData(sql, parameters, all, callback) {
 
 
 
-exports.update = function (sql, parameters, callback) {
+exports.update = function (resource, parameters, callback) {
 
   pool.getConnection(function (err, connection) {
     console.log("Inside....");
@@ -113,8 +109,9 @@ exports.update = function (sql, parameters, callback) {
 
     console.log("CONNECTEDDDD");
 
-    //var sql = getSqlQuery(resource);
+    var sql = getSqlQuery(resource);
     console.log(sql);
+    console.log(parameters);
 
     // Use the connection
     connection.query(sql, parameters, function (error, results, fields) {
@@ -128,7 +125,7 @@ exports.update = function (sql, parameters, callback) {
       }
       else {
         //var nestedRows = func.convertToNested(results, nestingOptions);
-        callback(null, true);
+        callback(null, results.affectedRows);
       }
 
       // Don't use the connection here, it has been returned to the pool.
