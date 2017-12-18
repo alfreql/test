@@ -15,14 +15,24 @@ module.exports.update = (event, context, callback) => {
 
   var resource = event.httpMethod + ":" + event.resource;
   console.log(resource);
-  var country = JSON.parse(event.body);
-  console.log(country);
+  var updatedObject = JSON.parse(event.body);
+  console.log(updatedObject);
   console.log("event.pathParameters.id = " + event.pathParameters.id);
-  repository.update(resource,  [country.Name, country.RegionCode, country.Deleted, country.PhoneCode, event.pathParameters.id], function (error, results) {
+
+  var params = [];
+  try {
+    params = getParametresValues(updatedObject, resource);
+  } catch (ex) {
+    console.log(ex);
+    return callback(null, { statusCode: 400, body: JSON.stringify("Bad Parameters") })
+  }
+  
+  params.push(event.pathParameters.id)
+  repository.update(resource, params, function (error, results) {
 
     if (error) {
       console.log("Error");
-      callback(error, null);
+      return callback(error, null);
     }
 
     var response = { statusCode: 404, body: JSON.stringify("Not Found") };
@@ -32,8 +42,46 @@ module.exports.update = (event, context, callback) => {
     }
 
     console.log("OKKKKIIIIIIIIII");
+    console.log(results);
     callback(null, response);
 
   });//*/
 
 };
+
+/**
+ * Retorna la query asignada al: HTTPMethod:/recurso
+ * @param {*} resource 
+ */
+var getParametresValues = function (updatedObject, resource) {
+  var sql = resources[resource];//"PUT:/country/{id}"
+  console.log(JSON.stringify(sql));
+
+  var arr = sql.split(/ set /i);//sql.split(" set ");
+  console.log(JSON.stringify(arr));
+
+  arr = arr[1].split(/ where /i); //arr[1].split(" where ");
+  console.log(JSON.stringify(arr));
+
+  var temp = arr[0].replace(/\s/g, '') + ",";
+  console.log(JSON.stringify(temp));
+
+  arr = temp.split("=?,");
+  console.log(JSON.stringify(arr));
+
+  var parameters = [];
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i]) {
+      if (typeof updatedObject[arr[i]] === 'undefined')
+        throw Error("Object recived has invalid propeties");
+
+      parameters.push(updatedObject[arr[i]]);
+    }
+
+  }
+  console.log(parameters);
+  return parameters;
+};
+
+
+

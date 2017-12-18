@@ -21,7 +21,7 @@ module.exports.getById = (event, context, callback) => {
 
     if (error) {
       console.log("Error");
-      callback(error, null);
+      return callback(error, null);
     }
 
     console.log("OKKKKIIIIIIIIII");

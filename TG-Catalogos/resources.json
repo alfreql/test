@@ -1,5 +1,11 @@
 {
     "GET:/country" : "SELECT CountryCode, Name, RegionCode, PhoneCode FROM Countries WHERE Deleted = 0",
     "GET:/country/{id}" : "SELECT CountryCode, Name, RegionCode, PhoneCode FROM Countries WHERE Deleted = 0 AND CountryCode = ?",
-    "PUT:/country/{id}" : "UPDATE Countries SET Name = ?, RegionCode = ?, Deleted = ?, PhoneCode = ?  WHERE CountryCode = ?"
+    "PUT:/country/{id}" : "UPDATE Countries SET Name = ?, RegionCode = ?, Deleted = ?, PhoneCode = ?  WHERE CountryCode = ?",
+
+    "GET:/currency" : "SELECT CurrencyCode, Symbol, Name FROM Currencies WHERE Deleted = 0",
+    "GET:/currency/{id}" : "SELECT CurrencyCode, Symbol, Name FROM Currencies WHERE Deleted = 0 AND CurrencyCode = ?",
+    "PUT:/currency/{id}" : "UPDATE Currencies SET CurrencyCode = ?, Symbol = ?, Name = ?, Deleted = ?  WHERE CurrencyCode = ?"
+
+
 }
