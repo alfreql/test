@@ -19,8 +19,8 @@ module.exports.getAll = (event, context, callback) => {
   repository.getAll(resource, null, function (error, results) {
 
     if (error) {
-      console.log("Eroor");
-      callback(error, null);
+      console.log("Error: " + error);
+      return callback(error, null);
     }
 
     console.log("OKKKKIIIIIIIIII");

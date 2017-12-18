@@ -76,6 +76,10 @@ functions:
           path: country
           method: get
           #private: true
+      #CURRENCY
+      - http:
+          path: currency
+          method: get
 ##############################################################    
   getById:
     handler: src/country/getById.getById
@@ -85,6 +89,14 @@ functions:
     events:
       - http:
           path: country/{id}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+      #Currency
+      - http:
+          path: currency/{id}
           method: get
           request:
             parameters:
@@ -101,6 +113,13 @@ functions:
           path: country/{id}
           method: put
           private: true
+      #Currency
+      - http:
+          path: currency/{id}
+          method: put
+          private: true
+
+         
     
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
